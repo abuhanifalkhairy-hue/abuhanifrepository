@@ -1,0 +1,58 @@
+cara awal membuat project Laravel
+1. buat folder project di explorer contoh : c:\projek\kearsipan
+2. klik kanan sambil tekan tombol shift pilih open powershell window
+3. ketik composer create-project Laravel/Laravel namaprojek(contoh : e-arsip) 10.* (10.* artinya versi laravel)
+4. jalankan aplikasi VScode 
+5. pilih file -> open folder -> selectfolder (folder projek yang telah dibuat)
+6. pilh menu terminal ketik php artisan serve (untuk menampilkan browser awal project)
+7. jika tidak error tampilan awal projek aplikasi akan tampil di browser
+
+lanjut membuat project menggunakan filament Laravel
+8. tambah terminal baru klik tanda + untuk intall filament
+9. ketik composer require filament/filament:"^3.2"-W ("^3.2" adalah versi filament)
+10. ketik php artisan filament:install --panels (untuk membuat dashboard /tampilan awal login)
+11.setting database dibagian .env ---> ganti nama database 
+12.jalankan xampp aktifkan apache dan MySQL
+13. ketik php artisan migrate
+14. ketik php artisan make:filament-user
+    isikan name : admin
+           email/addres : admin@gmail.com 
+           password : 123 
+15. coba login
+16. dashboard akan tampil di browser
+
+lanjut membuat model dan migration baru
+1.ketik php artisan make:model namamodel -m
+  tambahkan field tabel pada migrations .....dan array pada file model
+2.ketik php artisan migrate
+3. bikin tampilan CRUD dengan perintah php artisan make:filament-resource namamodel --generate
+
+https://www.youtube.com/watch?v=LMdlxj8DeH8
+
+FILE YAN DIUPLOAD AGAR BISA DIBUKA ketikan
+php artisan storage:link
+
+membersihkan cache
+php artisan filament:optimize-clear
+
+cara mengisi textinput secara otomatis dari tabel lain di database
+public static function form(Form $form): Form
+{
+    return $form
+        ->schema([
+
+            Select::make('product_id')
+                ->label('Produk')
+                ->relationship('product', 'name')
+                ->reactive()
+                ->afterStateUpdated(function ($state, callable $set) {
+                    $set('price', Product::find($state)?->price);
+                }),
+
+            TextInput::make('price')
+                ->label('Harga')
+                ->numeric()
+                ->readOnly(),
+
+        ]);
+}
